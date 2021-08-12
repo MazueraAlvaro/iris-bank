@@ -4,7 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "repack-zip",
+    "postbuild": "mkdir dist; mv iris-bank.zip dist/"
+  },
+  "repackZipConfig": {
+    "excludes": [
+      "test/**/*.*",
+      "coverage/**/*.*",
+      "sonar-project.js",
+      "local_launcher.js",
+      "sonar-project.properties",
+      "dist/**/*.*"
+    ]
   },
   "author": "Alvaro Mazuera",
   "license": "ISC",
