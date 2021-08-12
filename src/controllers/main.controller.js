@@ -1,5 +1,6 @@
 const DataProcessorException = require("../utils/DataProcessorException");
 const awsS3Service =  require("../services/awsS3.service");
+const dynamoDBService = require("../services/awsDynamoDB.service");
 const integrityValidator = require("../utils/integrityValidator");
 const init = async function(event, context){
     try {
@@ -20,6 +21,7 @@ const startProcess = async function(){
     // Validate Integrity
     integrityValidator(objectStats);
     //Save data into DynamoDB
+    await dynamoDBService.saveStats(objectStats);
 }
 
 module.exports = {init}
