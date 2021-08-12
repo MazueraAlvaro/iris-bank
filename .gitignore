@@ -1,3 +1,4 @@
 node_modules
 dist
 local_launcher.js
+.env
