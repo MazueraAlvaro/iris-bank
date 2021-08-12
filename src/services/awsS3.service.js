@@ -10,11 +10,11 @@ const getS3Client = function () {
   });
 };
 
-const getContactStatsFile = async function () {
+const getContactStatsFile = async function (file) {
   const s3Client = getS3Client();
   const params = {
     Bucket: "fdr-developer-test-22122020",
-    Key: "data.txt",
+    Key: file,
   };
   const command = new GetObjectCommand(params);
   return s3Client.send(command);
@@ -24,8 +24,8 @@ const getContactStatsFile = async function () {
  *
  * @returns {String}
  */
-const getContactStats = async function () {
-  const file = await getContactStatsFile();
+const getContactStats = async function (fileName = "data.txt") {
+  const file = await getContactStatsFile(fileName);
   const contentPromise = new Promise((resolve, reject) => {
     const chunks = [];
     file.Body.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
