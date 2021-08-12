@@ -2,6 +2,7 @@ const DataProcessorException = require("../utils/DataProcessorException");
 const awsS3Service =  require("../services/awsS3.service");
 const dynamoDBService = require("../services/awsDynamoDB.service");
 const integrityValidator = require("../utils/integrityValidator");
+const envVarsLoader =  require("../utils/envVarsLoader")
 const init = async function(event, context){
     try {
         return await startProcess(); 
@@ -16,6 +17,8 @@ const init = async function(event, context){
 }
 
 const startProcess = async function(){
+    //Load env vars
+    envVarsLoader.loadEnvVars()
     // Get stats from S3 bucket file
     const objectStats = await awsS3Service.getContactStats();
     // Validate Integrity
