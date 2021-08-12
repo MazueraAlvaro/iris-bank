@@ -22,6 +22,8 @@ const startProcess = async function(){
     integrityValidator(objectStats);
     //Save data into DynamoDB
     await dynamoDBService.saveStats(objectStats);
+    // Delete stats from S3 Bucket
+    await awsS3Service.deleteStats();
 }
 
 module.exports = {init}
