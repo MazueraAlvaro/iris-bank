@@ -3,4 +3,5 @@ dist
 local_launcher.js
 .env
 .nyc_output
+coverage/*
 coverage
