@@ -15,21 +15,6 @@ class DeleteObjectCommand {}
 
 const s3ClienSendtStub = sinon.stub();
 
-setTimeout(() => {
-  mockedStream.emit(
-    "data",
-    `totalContactoClientes=250
-motivoReclamo=25,
-motivoGarantia=10,
-motivoDuda=100,
-motivoCompra=100,
-motivoFelicitaciones=7,
-motivoCambio=8,
-hash=2f941516446dce09bc2841da60bf811f`
-  );
-  mockedStream.emit("end");
-}, 2000);
-
 s3ClienSendtStub
   .withArgs(
     new GetObjectCommand({
@@ -37,7 +22,24 @@ s3ClienSendtStub
       Key: "data.txt",
     })
   )
-  .resolves({ Body: mockedStream });
+  .callsFake(function () {
+    return new Promise( async (resolve) => {
+      resolve({Body: mockedStream});
+      await sleepPromise(0);
+      mockedStream.emit(
+        "data",
+        `totalContactoClientes=250
+motivoReclamo=25,
+motivoGarantia=10,
+motivoDuda=100,
+motivoCompra=100,
+motivoFelicitaciones=7,
+motivoCambio=8,
+hash=2f941516446dce09bc2841da60bf811f`
+      );
+      mockedStream.emit("end");
+    });
+  });
 
 s3ClienSendtStub
   .withArgs(
@@ -48,4 +50,12 @@ s3ClienSendtStub
   )
   .rejects(new Error("File not exists"));
 
-module.exports = { S3Client, GetObjectCommand, DeleteObjectCommand, s3ClienSendtStub };
+const sleepPromise = (mseconds = 1000) =>
+  new Promise((resolve) => setTimeout(resolve, mseconds));
+
+module.exports = {
+  S3Client,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  s3ClienSendtStub,
+};
